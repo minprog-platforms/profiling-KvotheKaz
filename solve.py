@@ -6,6 +6,8 @@ import os
 import sys
 
 from sudoku import Sudoku, load_from_file
+import time
+start_time = time.time()
 
 
 def solve(sudoku: Sudoku) -> Union[Sudoku, None]:
@@ -73,3 +75,4 @@ if __name__ == "__main__":
     # Show the solution
     print()
     print(solved_sudoku)
+print("--- %s seconds ---" % (time.time() - start_time))

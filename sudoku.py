@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Iterable, Sequence
+from typing import Iterable
 
 
 class Sudoku:
@@ -20,7 +20,8 @@ class Sudoku:
         """Place value at x,y."""
         row = self._grid[y]
         new_row = ""
-
+        # print(row)
+        # row[x] = str(value)
         for i in range(9):
             if i == x:
                 new_row += str(value)
@@ -37,19 +38,15 @@ class Sudoku:
 
     def value_at(self, x: int, y: int) -> int:
         """Returns the value at x,y."""
-        value = -1
 
-        for i in range(9):
-            for j in range(9):
-                if i == x and j == y:
-                    row = self._grid[y]
-                    value = int(row[x])
+        row = self._grid[y]
+        value = int(row[x])
 
         return value
 
     def options_at(self, x: int, y: int) -> Iterable[int]:
         """Returns all possible values (options) at x,y."""
-        options = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        options = {1, 2, 3, 4, 5, 6, 7, 8, 9}
 
         # Remove all values from the row
         for value in self.row_values(y):
@@ -80,9 +77,9 @@ class Sudoku:
 
         for y in range(9):
             for x in range(9):
-                if self.value_at(x, y) == 0 and next_x == -1 and next_y == -1:
+                if self.value_at(x, y) == 0:
                     next_x, next_y = x, y
-
+                    return next_x, next_y
         return next_x, next_y
 
     def row_values(self, i: int) -> Iterable[int]:
@@ -129,20 +126,18 @@ class Sudoku:
         """
         values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-        result = True
-
         for i in range(9):
             for value in values:
-                if value not in self.column_values(i):
-                    result = False
+                if 0 in self.column_values(i) or value not in self.column_values(i):
+                    return False
 
-                if value not in self.row_values(i):
-                    result = False
+                if 0 in self.row_values(i) or value not in self.row_values(i):
+                    return False
 
-                if value not in self.block_values(i):
-                    result = False
+                if 0 in self.block_values(i) or value not in self.block_values(i):
+                    return False
 
-        return result
+        return True
 
     def __str__(self) -> str:
         representation = ""
